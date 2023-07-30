@@ -1,5 +1,7 @@
 # Terraform
 
+It is assumed that AWS credentials will be configured on the system from where we will run this terraform script. I have not provided the AWS CLI credentials inside the provider block.
+
 - terraform init
 - terraform validate
 - terraform fmt
