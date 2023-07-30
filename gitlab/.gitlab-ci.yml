@@ -1,0 +1,45 @@
+stages:
+  - validate
+  - scan
+  - deploy
+
+variables:
+  # Define environment variables for AWS credentials or other required variables
+  # AWS_ACCESS_KEY_ID: "access_key"
+  # AWS_SECRET_ACCESS_KEY: "secret_key"
+
+# Stage: Validate
+validate:
+  stage: validate
+  image: hashicorp/terraform:light
+  script:
+    - terraform init
+    - terraform validate
+  only:
+    - merge_requests
+
+# Stage: Scan
+scan:
+  stage: scan
+  image: hashicorp/terraform:light
+  script:
+    - terraform init
+    # Run Terraform fmt to format the code
+    - terraform fmt -check=true -recursive
+    - tflint
+  only:
+    - merge_requests
+    # Add more branches where you want the scanning to run
+
+# Stage: Deploy
+deploy:
+  stage: deploy
+  image: hashicorp/terraform:light
+  script:
+    - terraform init
+    # Add any additional Terraform commands for deployment
+    # For example:
+    # - terraform apply -auto-approve
+  only:
+    - master
+    # Add more branches or tags where you want the deployment to run
